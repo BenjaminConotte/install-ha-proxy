@@ -1,0 +1,5 @@
+- name: Restart HA Proxy svc
+  become: true
+  service:
+    name: haproxy
+    state: restarted
