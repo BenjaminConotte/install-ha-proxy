@@ -1,2 +1,7 @@
 ---
+galaxy_info:
+  author: bconotte
+  role_name: install-ha-proxy
+  description: Role install HA Proxy for Kubernetes Master node
+  license: Apache2.0
 ...
