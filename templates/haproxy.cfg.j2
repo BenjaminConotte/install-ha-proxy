@@ -42,6 +42,12 @@ frontend f_kube_master
         option tcplog
         default_backend b_kube_master
 
+frontend f_kube_etcd
+        bind :2379 transparent
+        mode tcp
+        option tcplog
+        default_backend b_kube_etcd
+        
 backend b_kube_master
         mode tcp
         option tcplog
@@ -52,4 +58,15 @@ backend b_kube_master
         {% for master in groups['k8s-masters'] %}
 server {{ master }} {{ master }}:6443
         {% endfor %}
-        
+
+backend b_kube_etcd
+        mode tcp
+        option tcplog
+        balance leastconn
+        stick store-request src
+        stick-table type ip size 200k expire 30m
+        source 0.0.0.0 usesrc clientip
+        {% for master in groups['k8s-masters'] %}
+server {{ master }} {{ master }}:2379
+        {% endfor %}
+                
